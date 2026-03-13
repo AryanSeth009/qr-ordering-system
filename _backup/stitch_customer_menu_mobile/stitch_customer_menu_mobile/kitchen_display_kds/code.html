@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#990003",
+                        "background-light": "#f8f5f5",
+                        "background-dark": "#230f0f",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif": ["Lora", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .new-order-glow {
+            box-shadow: 0 0 15px rgba(153, 0, 3, 0.4);
+            border: 2px solid #990003;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex flex-col h-screen">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between px-6 py-4 bg-white dark:bg-zinc-900 border-b border-primary/10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined text-3xl">restaurant</span>
+<h1 class="font-serif text-2xl font-bold tracking-tight">Culinara KDS</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 text-sm" href="#">Active Orders</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors text-sm" href="#">Completed</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors text-sm" href="#">Inventory</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors text-sm" href="#">Statistics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="pl-10 pr-4 py-2 bg-background-light dark:bg-zinc-800 border-none rounded-lg focus:ring-2 focus:ring-primary/50 w-64 text-sm" placeholder="Search orders..." type="text"/>
+</div>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-zinc-700 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold">Station 01</p>
+<p class="text-[10px] text-slate-500">Main Kitchen</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Sub-Header / Filters -->
+<div class="px-6 py-3 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm border-b border-primary/5 flex items-center justify-between">
+<div class="flex gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary text-white text-xs font-bold">All Orders (12)</button>
+<button class="px-4 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-xs font-medium">Dine-in (8)</button>
+<button class="px-4 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-xs font-medium">Takeaway (4)</button>
+</div>
+<div class="flex items-center gap-4 text-xs font-medium text-slate-500">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> System Online</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> Last updated: Just now</span>
+</div>
+</div>
+<!-- Main Orders Grid -->
+<main class="flex-1 overflow-y-auto p-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+<!-- New Order Card -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden new-order-glow h-fit">
+<div class="bg-primary px-4 py-3 flex justify-between items-center text-white">
+<h3 class="font-serif font-bold text-lg">Table #12</h3>
+<span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">New Order</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">2x Caffè Latte</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Avocado Toast</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Food</span>
+</div>
+<p class="text-xs text-primary italic px-2 py-1 bg-primary/5 rounded border-l-2 border-primary">Extra chili flakes on toast</p>
+</div>
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">01:45</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Start</button>
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Ready</button>
+</div>
+</div>
+<!-- Active Order Card -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-100 dark:bg-zinc-800 px-4 py-3 flex justify-between items-center text-slate-700 dark:text-slate-300">
+<h3 class="font-serif font-bold text-lg">Table #05</h3>
+<span class="text-xs font-bold uppercase tracking-wider">Preparing</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight line-through opacity-50">1x Flat White</span>
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Almond Croissant</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bakery</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">04:20</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Started</button>
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Ready</button>
+</div>
+</div>
+<!-- Delayed Order Card -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border-2 border-orange-400 h-fit">
+<div class="bg-orange-400 px-4 py-3 flex justify-between items-center text-white">
+<h3 class="font-serif font-bold text-lg">Table #08</h3>
+<span class="text-xs font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-xs">warning</span> Delayed</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">3x Cappuccino</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">2x Buttermilk Pancakes</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Food</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-orange-500 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">08:45</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Started</button>
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Ready</button>
+</div>
+</div>
+<!-- Another Order Card -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-100 dark:bg-zinc-800 px-4 py-3 flex justify-between items-center text-slate-700 dark:text-slate-300">
+<h3 class="font-serif font-bold text-lg">Table #21</h3>
+<span class="text-xs font-bold uppercase tracking-wider">Queue</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Iced Lemon Tea</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Signature Burger</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Food</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">00:30</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Start</button>
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Ready</button>
+</div>
+</div>
+<!-- Repeat for Grid - Table 03 -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-100 dark:bg-zinc-800 px-4 py-3 flex justify-between items-center text-slate-700 dark:text-slate-300">
+<h3 class="font-serif font-bold text-lg">Table #03</h3>
+<span class="text-xs font-bold uppercase tracking-wider">Preparing</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">2x Espresso Shot</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">05:10</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Started</button>
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Ready</button>
+</div>
+</div>
+<!-- Table 15 -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-100 dark:bg-zinc-800 px-4 py-3 flex justify-between items-center text-slate-700 dark:text-slate-300">
+<h3 class="font-serif font-bold text-lg">Table #15</h3>
+<span class="text-xs font-bold uppercase tracking-wider">Preparing</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Mocha Frap</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Sesame Bagel</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bakery</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">03:55</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Started</button>
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Ready</button>
+</div>
+</div>
+<!-- Table 07 (Takeaway) -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-700 dark:bg-zinc-700 px-4 py-3 flex justify-between items-center text-white">
+<h3 class="font-serif font-bold text-lg">Order #1042</h3>
+<span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">Takeaway</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">4x Blueberry Muffins</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bakery</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Earl Grey Tea</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">12:15</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Start</button>
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Ready</button>
+</div>
+</div>
+<!-- Table 18 -->
+<div class="flex flex-col bg-white dark:bg-zinc-900 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-800 h-fit">
+<div class="bg-slate-100 dark:bg-zinc-800 px-4 py-3 flex justify-between items-center text-slate-700 dark:text-slate-300">
+<h3 class="font-serif font-bold text-lg">Table #18</h3>
+<span class="text-xs font-bold uppercase tracking-wider">Queue</span>
+</div>
+<div class="p-4 flex-1">
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">1x Caesar Salad</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Food</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">2x Mineral Water</span>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 mb-4">
+<span class="material-symbols-outlined text-lg">timer</span>
+<span class="text-lg font-bold">01:10</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-2 gap-2">
+<button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-primary/90 transition-colors">Start</button>
+<button class="bg-slate-100 dark:bg-zinc-800 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide cursor-not-allowed">Ready</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Stats Bar -->
+<footer class="px-6 py-4 bg-white dark:bg-zinc-900 border-t border-primary/10 flex items-center justify-between text-sm">
+<div class="flex gap-8">
+<div class="flex flex-col">
+<span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Active</span>
+<span class="font-bold text-slate-900 dark:text-slate-100">08 Orders</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Avg. Time</span>
+<span class="font-bold text-slate-900 dark:text-slate-100">4m 12s</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Delayed</span>
+<span class="font-bold text-orange-500 underline decoration-2">01 Order</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-zinc-800 rounded-lg font-bold text-xs hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors">
+<span class="material-symbols-outlined text-sm">settings</span>
+                    Kitchen Settings
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-sm">history</span>
+                    Order History
+                </button>
+</div>
+</footer>
+</div>
+</body></html>

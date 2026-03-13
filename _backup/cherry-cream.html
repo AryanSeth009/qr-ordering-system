@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cherry & Cream — Restaurant System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#990003",
+          "background-light": "#EFE6DE",
+          "background-dark": "#230f0f",
+          ink: "#1A1210",
+          muted: "#8A7B72",
+          cream: "#EFE6DE",
+        },
+        fontFamily: {
+          display: ["Plus Jakarta Sans", "sans-serif"],
+          serif: ["Cormorant Garamond", "serif"],
+          lora: ["Lora", "serif"],
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem",
+          lg: "0.5rem",
+          xl: "0.75rem",
+          full: "9999px",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .font-serif { font-family: 'Cormorant Garamond', serif; }
+  .font-lora { font-family: 'Lora', serif; }
+  .screen { display: none; }
+  .screen.active { display: flex; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .progress-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .new-order-glow { box-shadow: 0 0 15px rgba(153,0,3,0.4); border: 2px solid #990003; }
+  .nav-btn { cursor: pointer; transition: all 0.2s; }
+  .nav-btn:hover { opacity: 0.8; }
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  /* Landing page styles */
+  .hero-bg {
+    background: linear-gradient(135deg, #230f0f 0%, #3d1a1a 40%, #990003 100%);
+  }
+  .card-hover { transition: all 0.3s ease; }
+  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(153,0,3,0.15); }
+</style>
+</head>
+<body class="bg-background-light min-h-screen">
+
+<!-- ============================================================
+     TOP NAVIGATION (Desktop)
+     ============================================================ -->
+<nav id="desktop-nav" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-primary/10 hidden md:flex items-center justify-between px-8 py-3 shadow-sm">
+  <div class="flex items-center gap-3 cursor-pointer" onclick="showScreen('landing')">
+    <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white">
+      <span class="material-symbols-outlined text-xl">restaurant</span>
+    </div>
+    <span class="font-serif text-2xl font-bold text-primary">Cherry &amp; Cream</span>
+  </div>
+  <div class="flex items-center gap-1">
+    <button onclick="showScreen('customer-menu')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Menu</button>
+    <button onclick="showScreen('cart')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Cart</button>
+    <button onclick="showScreen('checkout')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Checkout</button>
+    <button onclick="showScreen('order-success')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Order Success</button>
+    <button onclick="showScreen('order-tracking')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Track Order</button>
+    <div class="w-px h-5 bg-primary/20 mx-2"></div>
+    <button onclick="showScreen('admin-login')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Admin Login</button>
+    <button onclick="showScreen('admin-dashboard')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Dashboard</button>
+    <button onclick="showScreen('menu-management')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">Menu Mgmt</button>
+    <button onclick="showScreen('kds')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">KDS</button>
+    <button onclick="showScreen('qr-codes')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/70 hover:text-primary hover:bg-primary/5">QR Codes</button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     LANDING PAGE
+     ============================================================ -->
+<div id="screen-landing" class="screen active flex-col min-h-screen pt-0">
+  <!-- Hero -->
+  <section class="hero-bg min-h-screen flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 bg-white/10 text-white/80 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-8 border border-white/10">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        Restaurant Management System
+      </div>
+      <h1 class="font-serif text-6xl md:text-8xl font-bold text-white mb-6 leading-none">
+        Cherry &amp; Cream
+      </h1>
+      <p class="text-white/60 text-lg md:text-xl font-light mb-12 max-w-2xl mx-auto leading-relaxed">
+        A complete restaurant management platform — from customer ordering to kitchen display, all in one elegant system.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <button onclick="showScreen('customer-menu')" class="bg-white text-primary font-bold px-8 py-4 rounded-xl text-base hover:bg-white/90 transition-all shadow-2xl shadow-black/30 flex items-center gap-2">
+          <span class="material-symbols-outlined">restaurant_menu</span>
+          Browse Menu
+        </button>
+        <button onclick="showScreen('admin-login')" class="bg-white/10 text-white font-bold px-8 py-4 rounded-xl text-base hover:bg-white/20 transition-all border border-white/20 flex items-center gap-2">
+          <span class="material-symbols-outlined">shield_person</span>
+          Admin Portal
+        </button>
+      </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 flex flex-col items-center gap-2">
+      <span class="text-xs font-semibold uppercase tracking-widest">Explore All Screens</span>
+      <span class="material-symbols-outlined animate-bounce">expand_more</span>
+    </div>
+  </section>
+
+  <!-- Screens Grid -->
+  <section class="bg-background-light py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-14">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-4">All Screens</h2>
+        <p class="text-muted text-lg">Click any card to explore that part of the system</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Customer Screens -->
+        <div class="col-span-full mb-2">
+          <h3 class="font-serif text-2xl font-bold text-primary border-b border-primary/20 pb-3">Customer Experience</h3>
+        </div>
+        
+        <div onclick="showScreen('customer-menu')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#EFE6DE] to-[#d4c5bb] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-primary text-7xl opacity-30 group-hover:scale-110 transition-transform">restaurant_menu</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Mobile</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Customer Menu</h4>
+            <p class="text-muted text-sm mt-1">Browse menu items, search, filter by category</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('cart')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#EFE6DE] to-[#d4c5bb] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-primary text-7xl opacity-30 group-hover:scale-110 transition-transform">shopping_bag</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Mobile</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Your Cart</h4>
+            <p class="text-muted text-sm mt-1">Review items, adjust quantities, add notes</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('checkout')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#EFE6DE] to-[#d4c5bb] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-primary text-7xl opacity-30 group-hover:scale-110 transition-transform">credit_card</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Mobile</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Checkout</h4>
+            <p class="text-muted text-sm mt-1">Payment method selection & order confirmation</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('order-success')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#EFE6DE] to-[#d4c5bb] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-primary text-7xl opacity-30 group-hover:scale-110 transition-transform">check_circle</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Mobile</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Order Confirmed</h4>
+            <p class="text-muted text-sm mt-1">Success screen with order number & wait time</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('order-tracking')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#EFE6DE] to-[#d4c5bb] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-primary text-7xl opacity-30 group-hover:scale-110 transition-transform">receipt_long</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Mobile</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Order Tracking</h4>
+            <p class="text-muted text-sm mt-1">Live status with progress & chef details</p>
+          </div>
+        </div>
+
+        <!-- Admin Screens -->
+        <div class="col-span-full mb-2 mt-6">
+          <h3 class="font-serif text-2xl font-bold text-primary border-b border-primary/20 pb-3">Admin & Operations</h3>
+        </div>
+
+        <div onclick="showScreen('admin-login')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#230f0f] to-[#3d1a1a] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-white/20 text-7xl group-hover:scale-110 transition-transform">lock</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-ink/10 text-ink text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Web</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Admin Login</h4>
+            <p class="text-muted text-sm mt-1">Secure portal access for staff</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('admin-dashboard')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#230f0f] to-[#3d1a1a] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-white/20 text-7xl group-hover:scale-110 transition-transform">dashboard</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-ink/10 text-ink text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Web</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Admin Dashboard</h4>
+            <p class="text-muted text-sm mt-1">Revenue, orders, kitchen status overview</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('menu-management')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#230f0f] to-[#3d1a1a] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-white/20 text-7xl group-hover:scale-110 transition-transform">menu_book</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-ink/10 text-ink text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Web</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Menu Management</h4>
+            <p class="text-muted text-sm mt-1">Add, edit & manage menu items</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('kds')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#230f0f] to-[#3d1a1a] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-white/20 text-7xl group-hover:scale-110 transition-transform">restaurant</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-ink/10 text-ink text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Web</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">Kitchen Display (KDS)</h4>
+            <p class="text-muted text-sm mt-1">Real-time kitchen order management</p>
+          </div>
+        </div>
+
+        <div onclick="showScreen('qr-codes')" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5 cursor-pointer group">
+          <div class="h-40 bg-gradient-to-br from-[#230f0f] to-[#3d1a1a] flex items-center justify-center relative overflow-hidden">
+            <span class="material-symbols-outlined text-white/20 text-7xl group-hover:scale-110 transition-transform">qr_code_2</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="bg-ink/10 text-ink text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Web</span>
+            </div>
+            <h4 class="font-bold text-lg text-ink">QR Code Manager</h4>
+            <p class="text-muted text-sm mt-1">Generate & export QR codes per table</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#1A1210] text-white/40 py-8 px-6 text-center text-sm">
+    <p class="font-serif text-white/60 text-lg mb-2">Cherry &amp; Cream Group</p>
+    <p>© 2024 — All rights reserved</p>
+  </footer>
+</div>
+
+<!-- ============================================================
+     CUSTOMER MENU (Mobile)
+     ============================================================ -->
+<div id="screen-customer-menu" class="screen flex-col min-h-screen bg-background-light pt-[56px] md:pt-[57px]">
+  <div class="max-w-md mx-auto w-full flex flex-col min-h-[calc(100vh-57px)]">
+    <header class="sticky top-[56px] md:top-[57px] z-40 bg-background-light/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-primary/10">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">menu</span>
+        <h1 class="font-serif text-2xl font-bold text-primary tracking-tight">Cherry &amp; Cream</h1>
+      </div>
+      <div class="relative">
+        <button onclick="showScreen('cart')" class="flex items-center justify-center p-2 rounded-full hover:bg-primary/5 transition-colors">
+          <span class="material-symbols-outlined text-ink">shopping_bag</span>
+        </button>
+        <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">3</span>
+      </div>
+    </header>
+    <div class="px-4 py-4">
+      <div class="relative flex items-center group">
+        <span class="material-symbols-outlined absolute left-4 text-primary/60">search</span>
+        <input class="w-full pl-12 pr-4 py-3 bg-white border-none rounded-xl shadow-sm focus:ring-2 focus:ring-primary/20 placeholder:text-stone-400 text-ink" placeholder="Search our delicious menu..." type="text"/>
+      </div>
+    </div>
+    <div class="flex gap-3 px-4 pb-4 overflow-x-auto no-scrollbar">
+      <button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary text-white text-sm font-semibold shadow-md">All</button>
+      <button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white text-ink border border-stone-200 text-sm font-medium">Coffee</button>
+      <button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white text-ink border border-stone-200 text-sm font-medium">Tea</button>
+      <button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white text-ink border border-stone-200 text-sm font-medium">Snacks</button>
+      <button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white text-ink border border-stone-200 text-sm font-medium">Pastries</button>
+    </div>
+    <main class="grid grid-cols-2 gap-4 px-4 pb-28 flex-1">
+      <div onclick="showScreen('cart')" class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="aspect-square w-full bg-cover bg-center overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnTLhiW94vu5scJqkuAGRzG75Y-2F32NUXI8wiv1Sh4ISxIH6TVqjWwD2ayktFc9dca8m3EEPIcehapmSXAd4MBJyL0GWXplBF-EnZhk-LYkGPhDDluBCE0IgNU79ybpbktTA_JMCp5234cTqLVsa5jhyIe3l0ZtMcSert2XLor-IJhYtXGkwBTnrQPcUtN-i1fjc3VPbyG9FXmN_AP_sVSvnvXQO1hf7TIWqeS7_I8mUMgppSOeea5DJ1du8PGqfqaXGlWVi7Hre-')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">Classic Latte</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Rich espresso with double steamed organic cream</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$5.50</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100">
+        <div class="aspect-square w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwBc6vEPZVYV3gIn94njPaLlWdHih8HqhyzoQrJtYoBfNiCVhOirRyFdTqsnAHn07v7iwY4eqkKm9P6LRsjE7OOXjjvrUpc2e6SUsF3el1VnGXfr--35dCtD54jRcrVLsQYpVOzH_5PsJn2y2YKQD6S6hKMQv-YgkmWUWdvF1fqHmEzO3g1IS75d9t5ySoE7TKnEkuCMcycVbB3Xherru7yfXIyDeXTk7oqyZafBBd0cOpK-G1BMSs8u1QWQErQiBCk2GvuUaW_qe5')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">Ceremonial Matcha</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Premium grade stone-ground matcha with honey</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$6.00</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100">
+        <div class="aspect-square w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_zJzicFXg6csfxB7TGTQUO3au24WGPaGziqCuW8-lnN_K4xbDtbqhUvPtCL9GqNqJ0p1zK4lzMrhlRRC08pKiNr0wQZyo23xqwudF89YMEvL778Mn-g-aIzsg3OAc9G3XP6H4dTw_kUcvFq9mrFZb49PRfXB7ISCDcZe8Ou-vIM6Alggn5lLLHPcjMCmMG88SfELBRjbe9wmA6SQMC699ZyPv2Rnw7JZGPoq01xAchEVYLoTo97ftx-6BLZIw8LdnlPuh3TRrV0Aw')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">Cherry Scone</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Buttery house-made pastry with fresh tart cherries</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$4.50</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100">
+        <div class="aspect-square w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzBHZp7YSKDvDMTOM0MO_RBSltEtXX0HAjUc8J_fyexWE6iQ9Wn0b7ZFur3LWivpDbyQzmeyPlwTFB5YVi4S3MGaNQKUD4_uxkyMCC_G1zc3q6Yzs8qd5reKXTEPCOA2D91M95y499lJcc_j7UJ8B7bpMnGG14MhBusrZuSvTtmDLtNLes0I25g1dSJFvYIp87SzwcF1NWBX1eabZI9y9WDUAMluddHXo0JLQfmC8atjz_b6zQ8DbKlNoCavL5R2ig-sIGVwbOLanN')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">Avocado Toast</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Toasted sourdough with chili flakes and radish</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$12.00</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100">
+        <div class="aspect-square w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9rycEafD14Wbp0ZG0qWMqbsOniBAnbsF0t4zTkKL7DKofa-t5X65XnzCKY673NWMKLcfaq_-VcK6UDrfiDWSbuF7CbIuW1cMYjtpIM3yTPhvmMWdQpvqxRkGFG8kHwK-X8hO0tE8XzON7ZLeBB23P-YLwoxzGkCiHcGOzx4FWmVs7BkZHuAB4bYskKa0WVRRGLz90uYYihVj-ruCfs8xIUK5E5Vsv08wy6Dida2JeFM3xzb1W2LbX8Rhcv-ztVhWD0kiKvFQInonU')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">Pain au Chocolat</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Twice-baked French pastry with dark chocolate</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$4.75</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100">
+        <div class="aspect-square w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAECCbwf5wWhUEmxmckujrbMEIUZXRpuGYFRG6LBoN8340cFBAzL1zEdhrR0zuowlXAnf3r6Pa-PrPemspNMjaKqUtc3K8YidQuO1i8FK1PcyoY965uuiX0biwaGE3mbebZdX-z7VfAUJsQTPh0-2q5JG-8qYNbk2iqlMmdaBn27oTJ7bYJmH6YRmtv1RZ-zTGq0BksQWY7Po89X8NmW9oYdn8tQvMglfmdFNdiTGo5gba3dZ6xAa2ItC8IfufovGsUs14l9daH-tZw')"></div>
+        <div class="p-3 flex flex-col flex-grow">
+          <h3 class="font-serif text-lg font-bold leading-tight text-ink">12hr Cold Brew</h3>
+          <p class="text-xs text-stone-500 mt-1 line-clamp-2">Smooth, low-acid coffee steeped for 12 hours</p>
+          <div class="mt-auto pt-3 flex items-center justify-between">
+            <span class="text-ink font-bold">$5.25</span>
+            <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-sm">add_shopping_cart</span></button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-stone-200 pb-safe-area">
+      <div class="flex justify-around items-center h-16 max-w-md mx-auto">
+        <a class="flex flex-col items-center gap-1 text-primary" href="#"><span class="material-symbols-outlined">restaurant_menu</span><p class="text-[10px] font-bold uppercase tracking-wider">Menu</p></a>
+        <a onclick="showScreen('order-tracking')" class="flex flex-col items-center gap-1 text-stone-400 cursor-pointer"><span class="material-symbols-outlined">receipt_long</span><p class="text-[10px] font-bold uppercase tracking-wider">Orders</p></a>
+        <a class="flex flex-col items-center gap-1 text-stone-400"><span class="material-symbols-outlined">favorite</span><p class="text-[10px] font-bold uppercase tracking-wider">Saved</p></a>
+        <a class="flex flex-col items-center gap-1 text-stone-400"><span class="material-symbols-outlined">person</span><p class="text-[10px] font-bold uppercase tracking-wider">Profile</p></a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- ============================================================
+     CART (Mobile)
+     ============================================================ -->
+<div id="screen-cart" class="screen flex-col min-h-screen bg-background-light pt-[56px] md:pt-[57px]">
+  <div class="relative flex h-auto min-h-[calc(100vh-57px)] w-full flex-col max-w-md mx-auto bg-white shadow-xl overflow-x-hidden">
+    <div class="sticky top-0 z-10 flex items-center bg-white/80 backdrop-blur-md p-4 justify-between border-b border-primary/10">
+      <button onclick="showScreen('customer-menu')" class="text-slate-900 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-primary/5 rounded-full transition-colors">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h2 class="text-slate-900 text-lg font-bold leading-tight tracking-tight flex-1 text-center">My Cart</h2>
+      <div class="size-10"></div>
+    </div>
+    <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-40">
+      <div class="flex items-center justify-between">
+        <h3 class="text-slate-900 text-xl font-bold leading-tight">Order Details</h3>
+        <span class="text-primary text-sm font-semibold px-3 py-1 bg-primary/10 rounded-full">2 Items</span>
+      </div>
+      <div class="flex gap-4 p-3 bg-white rounded-xl border border-primary/5 shadow-sm">
+        <div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-lg shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBxGuIxiOEr9D8C4euoK_bp52Jj2XmKpwRmUF2hpigYMkLECE2kdXFq2lwsNyEHnDnajzRdqgFOL4xB2NZ3P2PGdMqD-RO7zG6LbVULdB5xJ8Yb6bEgwx5PLHoQ2XkmimigTozmb9Jxn6J-4oMKGymA1ssYsSgHjJECpniVcFymVdekOzOz2Dvof1MPhI3ifzcX5F5R7srPKz-OTfY5e1X_lwjAeqRR96iliqjbX6Px3fT0uy6mdpLUVkvx_VrHvE-AVwnxLGLwrLQC");'></div>
+        <div class="flex flex-col justify-between flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="text-slate-900 text-base font-bold leading-tight">Espresso</p><p class="text-slate-500 text-sm font-normal">Double Shot</p></div>
+            <button class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+          </div>
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-primary text-base font-bold">$6.00</p>
+            <div class="flex items-center gap-3 bg-background-light p-1 rounded-lg border border-primary/10">
+              <button class="flex h-7 w-7 items-center justify-center rounded-md bg-white shadow-sm text-primary hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+              <span class="text-sm font-bold w-4 text-center">2</span>
+              <button class="flex h-7 w-7 items-center justify-center rounded-md bg-white shadow-sm text-primary hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-[18px]">add</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-4 p-3 bg-white rounded-xl border border-primary/5 shadow-sm">
+        <div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-lg shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAdFPYjzs2qQ7ycPqPJryb8jbc6HOxErAuPtGkJfqX4crPjsbxBU7P7E-HdqdyAhz7SP31-VQkYWWj2WhRIEuvOzvf12AbHEOeGnfSZvUl3p9LzTvToWXwmyQdGlXzMCGz8Zipkb0lcRk3JYWO1OanMqYfBmwOtPmR5XV3A6ZvbMaBbge8TghsxzYoYPYcM7b8i7fOCUTIF9M-1giN8-QWqTRBf5Rhjf3HTWHmqjFJ3SLJv3HgCtCI41pXKAK_HxnTszh7RHYtp7noq");'></div>
+        <div class="flex flex-col justify-between flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="text-slate-900 text-base font-bold leading-tight">Croissant</p><p class="text-slate-500 text-sm font-normal">Butter Flaky</p></div>
+            <button class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+          </div>
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-primary text-base font-bold">$4.50</p>
+            <div class="flex items-center gap-3 bg-background-light p-1 rounded-lg border border-primary/10">
+              <button class="flex h-7 w-7 items-center justify-center rounded-md bg-white shadow-sm text-primary hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+              <span class="text-sm font-bold w-4 text-center">1</span>
+              <button class="flex h-7 w-7 items-center justify-center rounded-md bg-white shadow-sm text-primary hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-[18px]">add</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-4">
+        <p class="text-slate-900 text-sm font-bold mb-2">Special Instructions</p>
+        <textarea class="w-full bg-white border border-primary/10 rounded-xl p-3 text-sm" placeholder="Add a note (e.g. no sugar, extra hot)..." rows="2"></textarea>
+      </div>
+    </div>
+    <div class="sticky bottom-0 bg-white border-t border-primary/10 p-4 pb-8 space-y-4">
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-sm"><span class="text-slate-500">Table Number</span><span class="font-bold text-slate-900 flex items-center gap-1"><span class="material-symbols-outlined text-sm">table_restaurant</span>Table 4</span></div>
+        <div class="flex justify-between items-center text-sm"><span class="text-slate-500">Subtotal</span><span class="font-medium text-slate-900">$10.50</span></div>
+        <div class="flex justify-between items-center text-sm"><span class="text-slate-500">Tax</span><span class="font-medium text-slate-900">$0.85</span></div>
+        <div class="flex justify-between items-center pt-2 border-t border-primary/5">
+          <span class="text-base font-bold text-slate-900">Total Amount</span>
+          <span class="text-xl font-bold text-primary">$11.35</span>
+        </div>
+      </div>
+      <button onclick="showScreen('checkout')" class="w-full bg-primary text-background-light py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2">
+        <span>Place Order</span><span class="material-symbols-outlined">shopping_bag</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CHECKOUT (Mobile)
+     ============================================================ -->
+<div id="screen-checkout" class="screen flex-col min-h-screen bg-cream pt-[56px] md:pt-[57px]">
+  <div class="relative flex min-h-[calc(100vh-57px)] w-full flex-col max-w-md mx-auto bg-cream pb-32">
+    <header class="sticky top-0 z-10 bg-cream/90 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-primary/10">
+      <button onclick="showScreen('cart')" class="flex size-10 items-center justify-center rounded-full hover:bg-primary/5 transition-colors"><span class="material-symbols-outlined text-ink">arrow_back</span></button>
+      <h1 class="font-serif text-2xl font-bold tracking-tight text-ink">Checkout</h1>
+      <div class="size-10"></div>
+    </header>
+    <main class="flex-1 px-4 py-6 space-y-6">
+      <section class="bg-white/50 rounded-xl p-4 border border-primary/5">
+        <div class="flex items-center gap-4">
+          <div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary"><span class="material-symbols-outlined">table_restaurant</span></div>
+          <div><p class="text-xs uppercase tracking-wider font-semibold text-primary/60">Dining Detail</p><p class="text-lg font-bold text-ink">Table Number: Table 4</p></div>
+        </div>
+      </section>
+      <section class="space-y-3">
+        <h2 class="font-serif text-xl font-bold px-1">Order Summary</h2>
+        <div class="bg-white/80 rounded-xl border border-primary/5 overflow-hidden">
+          <details class="group" open="">
+            <summary class="flex cursor-pointer items-center justify-between p-4 list-none"><span class="font-semibold text-ink">Items (2)</span><span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span></summary>
+            <div class="px-4 pb-4 space-y-3">
+              <div class="flex justify-between items-center py-2 border-t border-primary/5">
+                <div class="flex items-center gap-3">
+                  <div class="size-12 rounded-lg bg-cream overflow-hidden"><img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW2prl0l3_CmpzkrM3cR9sg6zNnJeWCDUER1dhCHiAVGVhkuvpSv-bBahwpeuBz8d5T3QXch_Tx5264W37xi2-HDpeZIxKAtGbBTGIUxDKBKHy79NmJVsKcT_lO5WDgpOpoPSMDB4t7sqdgSz3DNTDPjhUFxTeVqWkcmE39Cp53DmpMtXLqUMHCW_mLNEczwPa_2FYnas1u24ob0H3_EUyrN8pTjb6fTGDMIIk9LY_k1aC0gPFX-qXllzYdgpgPYEzvYRq7Pjdon89"/></div>
+                  <div><p class="font-medium text-ink">Cherry Danish</p><p class="text-xs text-primary/70">Pastry</p></div>
+                </div>
+                <p class="font-semibold text-ink">$5.50</p>
+              </div>
+              <div class="flex justify-between items-center py-2 border-t border-primary/5">
+                <div class="flex items-center gap-3">
+                  <div class="size-12 rounded-lg bg-cream overflow-hidden"><img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsihaUT1pNNM3Ds4s-9uZ7JWYDfZLWY36ntYRcmjKIqxYnZ-CGb54SLCuQZVMNywkaXwK3ebLlQ33L0ZeorhT2FyOOgJUDiK0jgqEXI2moCSGH57nIbNVs6WXH5mskgR_n8f27ixWo7Sfx9cJ9Ehn99WkxfoCPF-bsmR-KaNX00ZvGN2djGT9wxQKooFRth0r97ow8iq00azwqbvj_F_JXy1a99SMkhaYBk-n4WFwhAgDHQwMZaaXSbZm1cg0NSxC67m25QRvNXlFH"/></div>
+                  <div><p class="font-medium text-ink">Flat White</p><p class="text-xs text-primary/70">Large • Oat Milk</p></div>
+                </div>
+                <p class="font-semibold text-ink">$5.85</p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+      <section class="space-y-3">
+        <h2 class="font-serif text-xl font-bold px-1">Payment Method</h2>
+        <div class="space-y-3">
+          <label class="flex items-center gap-4 p-4 rounded-xl border-2 border-primary bg-white cursor-pointer">
+            <input checked class="text-primary focus:ring-primary size-5" name="payment" type="radio"/>
+            <div class="flex items-center gap-3 flex-1"><span class="material-symbols-outlined text-primary">storefront</span><span class="font-medium">Pay at Counter</span></div>
+          </label>
+          <label class="flex items-center gap-4 p-4 rounded-xl border border-primary/10 bg-white/60 cursor-pointer">
+            <input class="text-primary focus:ring-primary size-5" name="payment" type="radio"/>
+            <div class="flex items-center gap-3 flex-1"><span class="material-symbols-outlined text-primary">credit_card</span><span class="font-medium">Credit/Debit Card</span></div>
+          </label>
+          <label class="flex items-center gap-4 p-4 rounded-xl border border-primary/10 bg-white/60 cursor-pointer">
+            <input class="text-primary focus:ring-primary size-5" name="payment" type="radio"/>
+            <div class="flex items-center gap-3 flex-1"><span class="material-symbols-outlined text-primary">contactless</span><span class="font-medium">Apple / Google Pay</span></div>
+          </label>
+        </div>
+      </section>
+    </main>
+    <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-lg border-t border-primary/10 p-4 pb-8 space-y-4 shadow-2xl z-20">
+      <div class="flex items-center justify-between px-2">
+        <div><p class="text-sm font-medium text-primary/70">Total Amount</p><p class="text-2xl font-bold text-ink">$11.35</p></div>
+        <div class="text-right"><p class="text-[10px] uppercase tracking-tighter text-ink/40">Includes $0.85 Tax</p></div>
+      </div>
+      <button onclick="showScreen('order-success')" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Confirm &amp; Place Order</button>
+    </footer>
+  </div>
+</div>
+
+<!-- ============================================================
+     ORDER SUCCESS (Mobile)
+     ============================================================ -->
+<div id="screen-order-success" class="screen flex-col min-h-screen bg-background-light pt-[56px] md:pt-[57px]">
+  <div class="w-full max-w-md mx-auto bg-background-light flex flex-col items-center text-center pb-24">
+    <div class="mb-8 mt-12">
+      <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary !text-6xl" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;">check_circle</span>
+      </div>
+    </div>
+    <h1 class="font-serif text-ink text-4xl font-bold mb-3">Order Confirmed!</h1>
+    <p class="text-muted text-base font-normal leading-relaxed px-6 mb-10">Your order has been sent to the kitchen and is being prepared.</p>
+    <div class="w-full bg-white/50 border border-primary/10 rounded-xl p-6 mb-10 shadow-sm backdrop-blur-sm mx-4">
+      <div class="flex justify-between items-center border-b border-primary/5 pb-4 mb-4">
+        <div class="text-left"><p class="text-muted text-xs uppercase tracking-widest font-semibold mb-1">Order Number</p><p class="text-ink text-xl font-bold">#1234</p></div>
+        <div class="text-right"><p class="text-muted text-xs uppercase tracking-widest font-semibold mb-1">Status</p>
+          <div class="flex items-center gap-1 justify-end"><span class="size-2 bg-primary rounded-full"></span><p class="text-primary text-sm font-bold">In Progress</p></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="bg-primary/10 p-2 rounded-lg"><span class="material-symbols-outlined text-primary">schedule</span></div>
+        <div class="text-left"><p class="text-muted text-xs font-medium">Estimated Prep Time</p><p class="text-ink font-bold">15-20 mins</p></div>
+      </div>
+    </div>
+    <div class="w-full px-4 mb-10">
+      <div class="relative h-40 w-full overflow-hidden rounded-xl shadow-lg">
+        <img alt="Coffee and pastry" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgvaFDJ-obR8bMgcW9kDTjbIm1OL3sPjZVrChq7D5BmutaaHlGWEKxJbbMBFJ0j5GWeu-dnx2y9Ino8h6BRuHA7NvqkErnh8bpcENuEsJJy-b_8WOOfdPYsk5DGQaFZpImNvLQoB9srrsjA9KBCK_yJ2F4DG4AGyWX_-BcMXyuWabjj4ZnrX-Yp8NZrex005nXHDe63R4-iV71RnAfsnkuRjq_28VhkMmpGgo6L9qNcav0kci2XFjU-lzt5oNLaSkn0BB7BSpXjo7H"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent"></div>
+      </div>
+    </div>
+    <div class="w-full space-y-3 px-4 mb-12">
+      <button onclick="showScreen('order-tracking')" class="w-full bg-primary text-background-light py-4 rounded-xl font-bold shadow-md">Track Your Order</button>
+      <button onclick="showScreen('customer-menu')" class="w-full bg-transparent border-2 border-ink text-ink py-4 rounded-xl font-bold">Back to Menu</button>
+    </div>
+  </div>
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-primary/10 px-4 pb-4 pt-3 flex justify-around items-center">
+    <a onclick="showScreen('customer-menu')" class="flex flex-col items-center gap-1 text-muted cursor-pointer"><span class="material-symbols-outlined">coffee</span><p class="text-[10px] font-bold uppercase tracking-tighter">Menu</p></a>
+    <a class="flex flex-col items-center gap-1 text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span><p class="text-[10px] font-bold uppercase tracking-tighter">Orders</p></a>
+    <a class="flex flex-col items-center gap-1 text-muted"><span class="material-symbols-outlined">favorite</span><p class="text-[10px] font-bold uppercase tracking-tighter">Favorites</p></a>
+    <a class="flex flex-col items-center gap-1 text-muted"><span class="material-symbols-outlined">person</span><p class="text-[10px] font-bold uppercase tracking-tighter">Profile</p></a>
+  </div>
+</div>
+
+<!-- ============================================================
+     ORDER TRACKING (Mobile)
+     ============================================================ -->
+<div id="screen-order-tracking" class="screen flex-col min-h-screen bg-[#f8f5f5] pt-[56px] md:pt-[57px]">
+  <div class="relative mx-auto max-w-md bg-[#f8f5f5] min-h-[calc(100vh-57px)] flex flex-col shadow-2xl">
+    <header class="flex items-center p-4 sticky top-0 bg-[#f8f5f5]/80 backdrop-blur-md z-10">
+      <button onclick="showScreen('order-success')" class="size-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors text-primary"><span class="material-symbols-outlined">arrow_back</span></button>
+      <h1 class="flex-1 text-center text-lg font-bold tracking-tight">Track Order</h1>
+      <button class="size-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors text-primary"><span class="material-symbols-outlined">help_outline</span></button>
+    </header>
+    <main class="flex-1 px-4 pb-24">
+      <div class="mt-4 bg-white rounded-xl overflow-hidden shadow-sm border border-primary/5">
+        <div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAlnQL9PXw6tpsDNIihngCZ94O9TnrD68HhT-sRIdMhY-F2PgeoVZUr2ECoZkmXKbjMuXsV67ZPUps_v4-7ut2rG_aKRzfkS9oJj8-U-XCgEiftdBqPBCMLvOgtehRZl74UTuoOoMDQmLq2M28qhkxAsJBrqp1nC75tqcgQ7YOKzRkvmGs36N4bNFdmMoyXdgxoCCFerwkXbosQ_2Q8qJmiSzlI0IDHNkrv8y6uMC7S1YjqXxowPgDZCwWiDn3w5Ewgi_3O2gFR-F4f');">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 text-white">
+            <span class="bg-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">In Progress</span>
+            <h2 class="text-2xl font-bold mt-1">Order #1234</h2>
+          </div>
+        </div>
+        <div class="p-5 flex justify-between items-center">
+          <div><p class="text-slate-500 text-sm">Estimated Delivery</p><p class="text-xl font-bold text-primary italic font-lora">8 minutes</p></div>
+          <button onclick="showScreen('customer-menu')" class="bg-primary/10 text-primary px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-sm">restaurant_menu</span>View Menu</button>
+        </div>
+      </div>
+      <div class="mt-8 px-2">
+        <div class="flex justify-between items-end mb-4">
+          <h3 class="font-lora italic text-xl text-slate-800">Current Status</h3>
+          <span class="text-primary font-bold text-sm">40% Complete</span>
+        </div>
+        <div class="w-full h-3 bg-primary/10 rounded-full overflow-hidden relative">
+          <div class="h-full bg-primary rounded-full progress-shimmer" style="width: 40%;"></div>
+        </div>
+        <p class="mt-3 text-sm text-slate-500 flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary">schedule</span>Your chef is carefully plating your dishes.</p>
+      </div>
+      <div class="mt-10 space-y-0 relative">
+        <div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-200"></div>
+        <div class="relative flex gap-4 pb-8">
+          <div class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-white"><span class="material-symbols-outlined">check</span></div>
+          <div class="flex flex-col"><h4 class="font-lora text-lg leading-tight">Received</h4><p class="text-sm text-slate-500">Order confirmed at 12:05 PM</p></div>
+        </div>
+        <div class="relative flex gap-4 pb-8">
+          <div class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-white ring-4 ring-primary/20"><span class="material-symbols-outlined">restaurant</span></div>
+          <div class="flex flex-col"><h4 class="font-lora text-lg leading-tight text-primary font-bold">Preparing</h4><p class="text-sm text-slate-600">Est. completion: 12:20 PM</p></div>
+        </div>
+        <div class="relative flex gap-4 pb-8 opacity-50">
+          <div class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 text-slate-500"><span class="material-symbols-outlined">local_shipping</span></div>
+          <div class="flex flex-col"><h4 class="font-lora text-lg leading-tight">Ready</h4><p class="text-sm text-slate-500">Wait for server</p></div>
+        </div>
+        <div class="relative flex gap-4 pb-4 opacity-50">
+          <div class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 text-slate-500"><span class="material-symbols-outlined">flatware</span></div>
+          <div class="flex flex-col"><h4 class="font-lora text-lg leading-tight">Served</h4><p class="text-sm text-slate-500">Enjoy your meal</p></div>
+        </div>
+      </div>
+      <div class="mt-6 p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-center gap-4">
+        <div class="size-12 rounded-full overflow-hidden shrink-0 border-2 border-primary">
+          <img class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMfHi1W2C8c0SC7SH-AQngqTC0URrLs31wNTbaTTBS4hdMFxs_hgZpXQ4DpSOk15VBQO2yQ3MniVSuw60l0uBW1fqSquMg3XOqUZmnND9P9SKgXgVW0jtka2OhaLFDQS3sil0yDv6iagwRP8Ud2sh-SmaN_538-YMp74wAAEXGrjh0Iq8MllaTFOzlEJFAhgzTBXAhMoNyvLG_d5d-MsCJDYBGcqYNKCe1wUXhnnJuq1o0K9LASS-ViLchxI8AMhXGkg_nL5OkrXAY"/>
+        </div>
+        <div class="flex-1"><p class="text-xs uppercase tracking-widest text-primary font-bold">Your Chef</p><p class="text-lg font-lora">Chef Marco Rossi</p></div>
+        <button class="size-10 rounded-full bg-primary text-white flex items-center justify-center"><span class="material-symbols-outlined">chat_bubble</span></button>
+      </div>
+    </main>
+    <nav class="fixed bottom-0 left-0 right-0 mx-auto max-w-md bg-white/90 backdrop-blur-lg border-t border-slate-200 flex justify-around items-center py-2 pb-6 z-20">
+      <a onclick="showScreen('customer-menu')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium uppercase tracking-tighter">Home</span></a>
+      <a class="flex flex-col items-center gap-1 text-primary transition-colors"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">receipt_long</span><span class="text-[10px] font-medium uppercase tracking-tighter">Orders</span></a>
+      <a class="flex flex-col items-center gap-1 text-slate-400"><span class="material-symbols-outlined">grid_view</span><span class="text-[10px] font-medium uppercase tracking-tighter">Explore</span></a>
+      <a class="flex flex-col items-center gap-1 text-slate-400"><span class="material-symbols-outlined">person</span><span class="text-[10px] font-medium uppercase tracking-tighter">Profile</span></a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN LOGIN
+     ============================================================ -->
+<div id="screen-admin-login" class="screen flex-col min-h-screen bg-[#fdfaf3] pt-[56px] md:pt-[57px]">
+  <main class="flex-1 flex items-center justify-center p-6 sm:p-12">
+    <div class="w-full max-w-[460px] flex flex-col gap-8">
+      <div class="text-center space-y-2">
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-primary tracking-tight">Cherry &amp; Cream Admin</h1>
+        <p class="text-slate-500 text-base font-medium">Secure Portal Access</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-[0_20px_50px_rgba(153,0,3,0.08)] border border-primary/5 overflow-hidden">
+        <div class="h-32 w-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhINQeLDwKbHFrMazbGt912U_mM07nhM7alslUBLi8GBIMIpelMudyK2QP-fRyU5Eh6EV72g6YqUGy4QqKT2PVmGeecYksQSfnOM9LWQ_-K9SvKKii-qI-LgEZtSqTZRKW7z-7yZpNLH0xXfqsfr2TlXqhiiVqVpJ32qdGo2F0BArNRJAe4cr8-HCCdgaggbIysDP2Ab-0du69xKdZJoyFDZe_KqPj7kZoxkhNvckW2YBpNBIUyT_q6xb9vXzLu1M1fHkmbZ_yf-6n');">
+          <div class="w-full h-full bg-primary/20 backdrop-brightness-75"></div>
+        </div>
+        <div class="p-8 md:p-10 space-y-6">
+          <div class="space-y-1"><h2 class="text-2xl font-bold text-slate-900">Admin Login</h2><p class="text-slate-500 text-sm">Enter your administrative credentials</p></div>
+          <div class="space-y-5">
+            <div class="space-y-2">
+              <label class="text-sm font-semibold text-slate-700 ml-1">Username</label>
+              <div class="relative"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">person</span><input class="w-full pl-12 pr-4 py-4 rounded-lg border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-slate-400" placeholder="j.smith@cherrycream.com" type="text"/></div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center px-1"><label class="text-sm font-semibold text-slate-700">Password</label><a class="text-xs font-bold text-primary hover:underline" href="#">Forgot password?</a></div>
+              <div class="relative"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span><input class="w-full pl-12 pr-4 py-4 rounded-lg border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-slate-400" placeholder="••••••••••••" type="password"/></div>
+            </div>
+            <div class="flex items-center gap-3 px-1">
+              <input class="rounded border-slate-300 text-primary focus:ring-primary/30 size-4" type="checkbox"/>
+              <label class="text-sm text-slate-600 cursor-pointer">Remember this device for 30 days</label>
+            </div>
+            <button onclick="showScreen('admin-dashboard')" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 mt-4">
+              <span>Access Dashboard</span><span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-slate-400 text-xs font-medium uppercase tracking-widest">Authorized Personnel Only • System ID: CC-772</div>
+    </div>
+  </main>
+</div>
+
+<!-- ============================================================
+     ADMIN DASHBOARD
+     ============================================================ -->
+<div id="screen-admin-dashboard" class="screen flex-col min-h-screen bg-background-light pt-[56px] md:pt-[57px]">
+  <div class="flex h-[calc(100vh-57px)] overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-primary/10 flex flex-col shrink-0 hidden lg:flex">
+      <div class="p-6 border-b border-primary/5">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 bg-primary rounded-lg flex items-center justify-center text-white"><span class="material-symbols-outlined">restaurant</span></div>
+          <div><h1 class="font-serif text-2xl font-bold leading-none text-ink">La Cerise</h1><p class="text-[10px] uppercase tracking-widest text-primary font-bold">Admin Panel</p></div>
+        </div>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-semibold"><span class="material-symbols-outlined">dashboard</span><span class="text-sm">Dashboard</span></a>
+        <a onclick="showScreen('admin-dashboard')" class="flex items-center gap-3 px-4 py-3 rounded-lg text-ink/70 hover:bg-primary/5 cursor-pointer"><span class="material-symbols-outlined">shopping_bag</span><span class="text-sm">Orders</span></a>
+        <a onclick="showScreen('menu-management')" class="flex items-center gap-3 px-4 py-3 rounded-lg text-ink/70 hover:bg-primary/5 cursor-pointer"><span class="material-symbols-outlined">menu_book</span><span class="text-sm">Menu</span></a>
+        <a onclick="showScreen('qr-codes')" class="flex items-center gap-3 px-4 py-3 rounded-lg text-ink/70 hover:bg-primary/5 cursor-pointer"><span class="material-symbols-outlined">qr_code_2</span><span class="text-sm">QR Codes</span></a>
+        <a onclick="showScreen('kds')" class="flex items-center gap-3 px-4 py-3 rounded-lg text-ink/70 hover:bg-primary/5 cursor-pointer"><span class="material-symbols-outlined">monitor_heart</span><span class="text-sm">KDS</span></a>
+      </nav>
+      <div class="p-4 border-t border-primary/10">
+        <div class="flex items-center gap-3 px-2">
+          <div class="h-10 w-10 rounded-full bg-cover bg-center border-2 border-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDr14X3kCUrxkbo-FoRRqPZlaNF6UTxtoW1u7g8eyJAXN1MP__9LulGmUsyJlKf9fv6wL642YaAcOZ4-GtT2MjNYrHQjgwsgCHrYQKkg_KPa1ufrqb5wFtxzsu0i9hJI8oFGlLBiRKtS_aIP59Y-ij_5eGQgt2mTUSm0SyW-y4NT1TicZkZHzwpTVU0WUIURsnB7flR4Qfz44qXeKF1USgNNgubE2bmQLx_o86iUly_aJSvsJ6ZaHbi-bAoA2Q4iL4hQCMW6X3Yd-WH')"></div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-bold truncate text-ink">Julian Casablancas</p><p class="text-xs text-ink/60">Head Manager</p></div>
+        </div>
+      </div>
+    </aside>
+    <main class="flex-1 overflow-y-auto p-6 lg:p-8">
+      <header class="flex justify-between items-end mb-8">
+        <div>
+          <h2 class="font-serif text-4xl lg:text-5xl font-bold text-ink mb-1">Dashboard Overview</h2>
+          <p class="text-ink/60">Real-time performance metrics for today</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="px-4 py-2 bg-white border border-primary/10 rounded-lg text-sm font-medium flex items-center gap-2"><span class="material-symbols-outlined text-sm">calendar_today</span>Oct 24, 2023</button>
+          <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium flex items-center gap-2 shadow-lg shadow-primary/20"><span class="material-symbols-outlined text-sm">download</span>Export Report</button>
+        </div>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl border border-primary/10 shadow-sm relative overflow-hidden group"><div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full transition-all group-hover:scale-110"></div><p class="text-sm font-medium text-ink/60 uppercase tracking-wider">Today's Revenue</p><div class="flex items-baseline gap-2 mt-2"><h3 class="text-4xl font-bold text-ink">$1,240</h3><span class="text-green-600 text-sm font-bold flex items-center"><span class="material-symbols-outlined text-xs">arrow_upward</span>12.5%</span></div><p class="text-xs text-ink/40 mt-4">Compared to $1,102 yesterday</p></div>
+        <div class="bg-white p-6 rounded-xl border border-primary/10 shadow-sm relative overflow-hidden group"><div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full transition-all group-hover:scale-110"></div><p class="text-sm font-medium text-ink/60 uppercase tracking-wider">Active Orders</p><div class="flex items-baseline gap-2 mt-2"><h3 class="text-4xl font-bold text-ink">8</h3><span class="text-primary text-sm font-bold flex items-center"><span class="material-symbols-outlined text-xs">arrow_upward</span>3%</span></div><p class="text-xs text-ink/40 mt-4">4 orders in preparation</p></div>
+        <div class="bg-white p-6 rounded-xl border border-primary/10 shadow-sm relative overflow-hidden group"><div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full transition-all group-hover:scale-110"></div><p class="text-sm font-medium text-ink/60 uppercase tracking-wider">Kitchen Status</p><div class="flex items-baseline gap-2 mt-2"><h3 class="text-4xl font-bold text-ink">14m</h3><span class="text-ink/60 text-sm font-medium">avg wait</span></div><p class="text-xs text-ink/40 mt-4">Within target threshold</p></div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white rounded-xl border border-primary/10 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-primary/10 flex justify-between items-center"><h4 class="font-serif text-2xl font-bold text-ink">Latest Orders</h4><a class="text-primary text-sm font-bold hover:underline" href="#">View All</a></div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-primary/5 text-ink/60 text-xs uppercase tracking-wider"><tr><th class="px-6 py-4 font-semibold">Order ID</th><th class="px-6 py-4 font-semibold">Table #</th><th class="px-6 py-4 font-semibold">Total</th><th class="px-6 py-4 font-semibold">Status</th><th class="px-6 py-4 font-semibold">Action</th></tr></thead>
+              <tbody class="divide-y divide-primary/5">
+                <tr class="hover:bg-primary/[0.02]"><td class="px-6 py-4 font-bold text-ink">#8842</td><td class="px-6 py-4">Table 12</td><td class="px-6 py-4 font-bold">$84.50</td><td class="px-6 py-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white">Preparing</span></td><td class="px-6 py-4"><button class="material-symbols-outlined text-ink/40 hover:text-primary">more_horiz</button></td></tr>
+                <tr class="hover:bg-primary/[0.02]"><td class="px-6 py-4 font-bold text-ink">#8841</td><td class="px-6 py-4">Table 05</td><td class="px-6 py-4 font-bold">$126.20</td><td class="px-6 py-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">Received</span></td><td class="px-6 py-4"><button class="material-symbols-outlined text-ink/40 hover:text-primary">more_horiz</button></td></tr>
+                <tr class="hover:bg-primary/[0.02]"><td class="px-6 py-4 font-bold text-ink">#8840</td><td class="px-6 py-4">Takeaway</td><td class="px-6 py-4 font-bold">$42.00</td><td class="px-6 py-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white">Preparing</span></td><td class="px-6 py-4"><button class="material-symbols-outlined text-ink/40 hover:text-primary">more_horiz</button></td></tr>
+                <tr class="hover:bg-primary/[0.02]"><td class="px-6 py-4 font-bold text-ink">#8839</td><td class="px-6 py-4">Table 02</td><td class="px-6 py-4 font-bold">$215.00</td><td class="px-6 py-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">Received</span></td><td class="px-6 py-4"><button class="material-symbols-outlined text-ink/40 hover:text-primary">more_horiz</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-primary/10 shadow-sm">
+          <h4 class="font-serif text-2xl font-bold text-ink mb-6">Popular Items</h4>
+          <div class="space-y-6">
+            <div class="flex items-center gap-4"><div class="h-16 w-16 rounded-lg bg-cover bg-center shrink-0 border border-primary/5" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkiC2ImuctiCdlVNC7w17ZhVmTN_44XAzDpTPmUIwYgtKKcXLRygA5_hdQ8rack4aCsdcK7J6YPUEYYMRqOCwjgjT4Hz6Rg3X_Pa8Id-H_CBinUNZ7zzpzsUYiWtNVWpMUL9aX3wTIgJ-CxnitkMZFqF6TAyEMxbGXFffVHly3JCWYRbf1yEhFXCXxRfN7nJps7k6zLmb7YgVZqk3IcidAaWmNL0r2qM56b0RTRu2XrU-n49cQ-DbNIrDY8_Jg6Nz1LqXjdho6x2YV')"></div><div class="flex-1"><p class="text-sm font-bold text-ink">Truffle Pasta</p><p class="text-xs text-ink/60">42 orders today</p><div class="w-full bg-primary/10 h-1 rounded-full mt-2"><div class="bg-primary h-full rounded-full" style="width: 85%"></div></div></div></div>
+            <div class="flex items-center gap-4"><div class="h-16 w-16 rounded-lg bg-cover bg-center shrink-0 border border-primary/5" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDt8_KJnJHK29QikMfYLe_giATCv3w98T6QAV2D5Mdk8-Y4Am2YrvmePY-IgSmFeVLsSwydmQGFRR9Qvak2XWWTF_ZaG5MrNKzFBOnqv3kxm3FsBD7MEW162NGX4QStYjk4NQg-KDJ_VrSJWeXEXlUa15QAYO8u2ySbEHNTMU64j6NfunfwAXIx2rkUnY3vPZUBcv57V-JGNur4PXZR4wyxImCFo5aJxUl-kC2YEPtahXrEaUT-WegNqpQgkzeyyDZQ4YgBlBgglfod')"></div><div class="flex-1"><p class="text-sm font-bold text-ink">Margherita Pizza</p><p class="text-xs text-ink/60">38 orders today</p><div class="w-full bg-primary/10 h-1 rounded-full mt-2"><div class="bg-primary h-full rounded-full" style="width: 76%"></div></div></div></div>
+            <div class="flex items-center gap-4"><div class="h-16 w-16 rounded-lg bg-cover bg-center shrink-0 border border-primary/5" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCoev5GXgN5zA9CiOaYjjG5mIVCKX_G99rmLDgpAd-HmIhAdh7ljgxhPVrnDA1hNdRBjnAVVnAiZ830mhflUjN8AmzKm6nPvTh9FmTOUe-s7Q6JMqXbFoJzTsmS6D9A-o4Zjuv5fVwRaVeKbs1gqlMxBslVEE86s3iK_bF2jpJLTPMmu0lo5wdIEIQgIPKzXml3xWhFx9-_nQ-IT7i6uF4jz97jJhiM0m-gAhl-JgEvQ9DCGX_L6Lh29XTD6IkU4rzTtVc2a77rliYV')"></div><div class="flex-1"><p class="text-sm font-bold text-ink">Classic Burger</p><p class="text-xs text-ink/60">31 orders today</p><div class="w-full bg-primary/10 h-1 rounded-full mt-2"><div class="bg-primary h-full rounded-full" style="width: 62%"></div></div></div></div>
+          </div>
+          <button onclick="showScreen('menu-management')" class="w-full mt-8 py-3 text-sm font-bold border border-primary/20 text-primary rounded-lg hover:bg-primary/5 transition-colors">Full Menu Analytics</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================================================
+     MENU MANAGEMENT
+     ============================================================ -->
+<div id="screen-menu-management" class="screen flex-col min-h-screen bg-[#f8f5f5] pt-[56px] md:pt-[57px]">
+  <div class="flex h-[calc(100vh-57px)] overflow-hidden">
+    <aside class="w-64 bg-white border-r border-primary/10 flex flex-col shrink-0 hidden lg:flex">
+      <div class="p-6 border-b border-primary/5"><div class="flex items-center gap-2"><div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white"><span class="material-symbols-outlined">restaurant</span></div><div><h1 class="text-lg font-bold leading-none">RestoAdmin</h1><p class="text-xs text-slate-500 font-medium mt-1 uppercase tracking-wider">Management Portal</p></div></div></div>
+      <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+        <a onclick="showScreen('admin-dashboard')" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-primary/5 rounded-lg cursor-pointer"><span class="material-symbols-outlined">dashboard</span><span class="text-sm font-semibold">Dashboard</span></a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg"><span class="material-symbols-outlined">menu_book</span><span class="text-sm font-semibold">Menu</span></a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-primary/5 rounded-lg"><span class="material-symbols-outlined">shopping_cart</span><span class="text-sm font-semibold">Orders</span></a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-primary/5 rounded-lg"><span class="material-symbols-outlined">group</span><span class="text-sm font-semibold">Customers</span></a>
+      </nav>
+      <div class="p-4 border-t border-primary/5"><div class="flex items-center gap-3 p-2 rounded-lg bg-primary/5"><div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary overflow-hidden"><img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARyzFB4PGd5nMWdhGEKr3lgELoAuZ3ttcGG7r938uURta2pe1y1oFrhd_mTLB5Jue591hL8I__AiLb4jUQOf_qZoJ2qKFm0fA0CWhII4hINrZK0g2ieB5X19SlRlwYfktt5aydC17omg3QBXkwSPkUvYYhEhH_vCUeXn0ezA62d7kYDrnUT9bY6PWUnwC0JZ-KzpE5ky3ImYzuqlLJrdA11uh-D6eYv48lk5AWTFnpJuqNuyGSQOxcVVnckBi-dlidR49vJTtLEcrW"/></div><div class="flex-1 min-w-0"><p class="text-sm font-bold truncate">Alex Morgan</p><p class="text-[10px] text-slate-500 truncate uppercase font-bold">Manager</p></div></div></div>
+    </aside>
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+      <header class="h-16 bg-white border-b border-primary/10 flex items-center justify-between px-8 shrink-0">
+        <div class="flex items-center gap-4 flex-1"><div class="relative max-w-md w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span><input class="w-full bg-slate-100 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Search menu items..." type="text"/></div></div>
+        <div class="flex items-center gap-4">
+          <button class="size-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-2.5 right-2.5 size-2 bg-primary rounded-full border-2 border-white"></span></button>
+          <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-bold shadow-sm"><span class="material-symbols-outlined text-xl">add</span><span>Add New Item</span></button>
+        </div>
+      </header>
+      <div class="flex-1 overflow-y-auto p-8">
+        <div class="flex flex-col gap-6">
+          <div class="flex items-end justify-between border-b border-primary/10 pb-1">
+            <div class="flex gap-8">
+              <button class="pb-4 border-b-2 border-primary text-primary font-bold text-sm">All Items</button>
+              <button class="pb-4 border-b-2 border-transparent text-slate-500 font-bold text-sm">Starters</button>
+              <button class="pb-4 border-b-2 border-transparent text-slate-500 font-bold text-sm">Main Course</button>
+              <button class="pb-4 border-b-2 border-transparent text-slate-500 font-bold text-sm">Desserts</button>
+              <button class="pb-4 border-b-2 border-transparent text-slate-500 font-bold text-sm">Beverages</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
+            <div class="bg-white rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+              <div class="relative aspect-video bg-slate-200 overflow-hidden"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzRNbVp02nhWkahDhRq3FNRAa4127cRkr7Vn8K8ZQzKh8z1Jlu-zek9MGfHmSC6GPgW3DVC7UBGG9ganqdNINlkVjeO7itVp74GWqZARUieAlBs-Zj1e9vwMX_E1fx2YciIhrUvpvMZBSAVrOA9F77Qrtec8u3dFGcLAjftHAq4HyGf6Lw_J4WlavbndscscrnBitO7r7hxOCGVG8AesWuCrymEPvBG7_iDCypuclbWaBzNwxGHwjWwX_njRM7qooluZL6TSaS9Rhk"/><div class="absolute bottom-3 left-3"><span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Main Course</span></div></div>
+              <div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-slate-900">Classic Wagyu Burger</h3><span class="font-bold text-primary">$18.50</span></div><p class="text-sm text-slate-500 line-clamp-2 mb-4">A premium wagyu beef patty topped with truffle aioli, aged cheddar, and caramelized onions.</p><div class="flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-bold text-slate-600 uppercase tracking-tighter">Available</span><div class="text-[10px] font-bold text-slate-400">SKU: BURG-001</div></div></div>
+            </div>
+            <div class="bg-white rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+              <div class="relative aspect-video bg-slate-200 overflow-hidden"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFJbHeIojbB78zU2KUIUI0e9UN6L4xi1Z-d-LtG9l3Kigdw_iR-iCYb7Lm6WGnMwJm9P0pufsBMoLUREIYsCwbJpTfxh6Q3MOPKSvDwgQLoMZdom6IEYPh7UY3-LDNoVela4Vq8Va2qmraK3L939UDdKeA5_KPsXgk5IRNJpsbZM8X_vtw4sPEU2R5yoEBBFMF0I7SFJGhmhKfEpB8OKrOVLr9GBRsINVnALhy7LaOdYtUD7Jl-wjMTcrh_L9GbRNaGeiQbSlbrq4"/><div class="absolute bottom-3 left-3"><span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Main Course</span></div></div>
+              <div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-slate-900">Herb Crusted Salmon</h3><span class="font-bold text-primary">$24.00</span></div><p class="text-sm text-slate-500 line-clamp-2 mb-4">Atlantic salmon with a crust of fresh parsley, dill and lemon zest, served with asparagus.</p><div class="flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-bold text-slate-600 uppercase tracking-tighter">Available</span><div class="text-[10px] font-bold text-slate-400">SKU: FISH-024</div></div></div>
+            </div>
+            <div class="bg-white rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+              <div class="relative aspect-video bg-slate-200 overflow-hidden grayscale"><img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANRamulBve3UIyrNjSUMFFxWjHRmbQx_6orkdzS7evrYUE7P2TwPi5M4uDTjmBT53VQCOG9dc8fHWRPVrTxGCzS3fKJ8C8Q96X1KbkUmJzv18AlJ7-FXw-O-090Wh4lRul7dDvOM4swonCSwKyWpjxjz_6JRIxNco21b4tgI9uit71VdhR9dYza5LyypiWVeEt76UbVq0_jhZqNnpv5QPq3lbRQVHsjAHjplP6ctwhM0_YxfLi2OZIYRB13SXr8sal6BLZjB3wR33Q"/><div class="absolute inset-0 flex items-center justify-center bg-black/40"><span class="text-white font-bold text-sm tracking-widest uppercase">Sold Out</span></div><div class="absolute bottom-3 left-3"><span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Desserts</span></div></div>
+              <div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-slate-900 opacity-60">Dark Lava Cake</h3><span class="font-bold text-primary opacity-60">$12.00</span></div><p class="text-sm text-slate-500 line-clamp-2 mb-4 opacity-60">Warm chocolate cake with a molten dark chocolate center, served with vanilla bean gelato.</p><div class="flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Out of Stock</span><div class="text-[10px] font-bold text-slate-400">SKU: DESS-009</div></div></div>
+            </div>
+            <div class="bg-white rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+              <div class="relative aspect-video bg-slate-200 overflow-hidden"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxY7_06UJXf7clgTWDwySydm6FLgz9EK82NPkaEfUpl_mcc5Wu-1klc3KHkMr0BNnzbvMhRJGN-FVyqjU94KPmZtTgwNnJ6E-flfQA43VNUi--eMJjSL9dnXKOiZ7ykYQwWKJeQnROeeYDpQwA8SY20d24AMEjrTr0t9XExVqhJPasL9xYtA9cji0FUiTFQcDMFGQTF3ubtN6ribr8csLjcFMDSWQyFoU0HXU4udYtFf19jyBgpmHDXeDCJf2PhM8KZH0jbWRFpHaW"/><div class="absolute bottom-3 left-3"><span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Starters</span></div></div>
+              <div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-bold text-slate-900">Mediterranean Salad</h3><span class="font-bold text-primary">$14.00</span></div><p class="text-sm text-slate-500 line-clamp-2 mb-4">A fresh mix of seasonal greens, kalamata olives, feta cheese, and balsamic vinaigrette.</p><div class="flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-bold text-slate-600 uppercase tracking-tighter">Available</span><div class="text-[10px] font-bold text-slate-400">SKU: STAR-012</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================================================
+     KDS
+     ============================================================ -->
+<div id="screen-kds" class="screen flex-col min-h-screen bg-[#f8f5f5] pt-[56px] md:pt-[57px]">
+  <div class="flex flex-col h-[calc(100vh-57px)]">
+    <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-primary/10">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-3 text-primary"><span class="material-symbols-outlined text-3xl">restaurant</span><h1 class="font-lora text-2xl font-bold tracking-tight">Culinara KDS</h1></div>
+        <nav class="hidden md:flex items-center gap-6">
+          <a class="text-primary font-bold border-b-2 border-primary pb-1 text-sm">Active Orders</a>
+          <a class="text-slate-500 font-medium hover:text-primary text-sm cursor-pointer">Completed</a>
+          <a class="text-slate-500 font-medium hover:text-primary text-sm cursor-pointer">Inventory</a>
+          <a class="text-slate-500 font-medium hover:text-primary text-sm cursor-pointer">Statistics</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span><input class="pl-10 pr-4 py-2 bg-background-light border-none rounded-lg focus:ring-2 focus:ring-primary/50 w-64 text-sm" placeholder="Search orders..." type="text"/></div>
+        <div class="flex items-center gap-3"><div class="text-right hidden sm:block"><p class="text-xs font-bold">Station 01</p><p class="text-[10px] text-slate-500">Main Kitchen</p></div><div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20"><span class="material-symbols-outlined">person</span></div></div>
+      </div>
+    </header>
+    <div class="px-6 py-3 bg-white/50 backdrop-blur-sm border-b border-primary/5 flex items-center justify-between">
+      <div class="flex gap-2">
+        <button class="px-4 py-1.5 rounded-full bg-primary text-white text-xs font-bold">All Orders (12)</button>
+        <button class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-medium">Dine-in (8)</button>
+        <button class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-medium">Takeaway (4)</button>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-medium text-slate-500">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span>System Online</span>
+      </div>
+    </div>
+    <main class="flex-1 overflow-y-auto p-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <div class="flex flex-col bg-white rounded-xl overflow-hidden new-order-glow h-fit">
+          <div class="bg-primary px-4 py-3 flex justify-between items-center text-white"><h3 class="font-lora font-bold text-lg">Table #12</h3><span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">New Order</span></div>
+          <div class="p-4 flex-1"><div class="space-y-3 mb-6"><div class="flex justify-between items-start"><span class="text-sm font-bold">2x Caffè Latte</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span></div><div class="flex justify-between items-start"><span class="text-sm font-bold">1x Avocado Toast</span><span class="text-[10px] text-slate-400 uppercase font-bold">Food</span></div><p class="text-xs text-primary italic px-2 py-1 bg-primary/5 rounded border-l-2 border-primary">Extra chili flakes on toast</p></div><div class="flex items-center gap-2 text-primary mb-4"><span class="material-symbols-outlined text-lg">timer</span><span class="text-lg font-bold">01:45</span></div></div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2"><button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Start</button><button class="bg-slate-100 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Ready</button></div>
+        </div>
+        <div class="flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 h-fit">
+          <div class="bg-slate-100 px-4 py-3 flex justify-between items-center text-slate-700"><h3 class="font-lora font-bold text-lg">Table #05</h3><span class="text-xs font-bold uppercase tracking-wider">Preparing</span></div>
+          <div class="p-4 flex-1"><div class="space-y-3 mb-6"><div class="flex justify-between items-start"><span class="text-sm font-bold line-through opacity-50">1x Flat White</span><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span></div><div class="flex justify-between items-start"><span class="text-sm font-bold">1x Almond Croissant</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bakery</span></div></div><div class="flex items-center gap-2 text-slate-600 mb-4"><span class="material-symbols-outlined text-lg">timer</span><span class="text-lg font-bold">04:20</span></div></div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2"><button class="bg-slate-100 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Started</button><button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Ready</button></div>
+        </div>
+        <div class="flex flex-col bg-white rounded-xl overflow-hidden border-2 border-orange-400 h-fit">
+          <div class="bg-orange-400 px-4 py-3 flex justify-between items-center text-white"><h3 class="font-lora font-bold text-lg">Table #08</h3><span class="text-xs font-bold uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-xs">warning</span>Delayed</span></div>
+          <div class="p-4 flex-1"><div class="space-y-3 mb-6"><div class="flex justify-between items-start"><span class="text-sm font-bold">3x Cappuccino</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span></div><div class="flex justify-between items-start"><span class="text-sm font-bold">2x Buttermilk Pancakes</span><span class="text-[10px] text-slate-400 uppercase font-bold">Food</span></div></div><div class="flex items-center gap-2 text-orange-500 mb-4"><span class="material-symbols-outlined text-lg">timer</span><span class="text-lg font-bold">08:45</span></div></div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2"><button class="bg-slate-100 text-slate-500 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Started</button><button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Ready</button></div>
+        </div>
+        <div class="flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 h-fit">
+          <div class="bg-slate-100 px-4 py-3 flex justify-between items-center text-slate-700"><h3 class="font-lora font-bold text-lg">Table #21</h3><span class="text-xs font-bold uppercase tracking-wider">Queue</span></div>
+          <div class="p-4 flex-1"><div class="space-y-3 mb-6"><div class="flex justify-between items-start"><span class="text-sm font-bold">1x Iced Lemon Tea</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span></div><div class="flex justify-between items-start"><span class="text-sm font-bold">1x Signature Burger</span><span class="text-[10px] text-slate-400 uppercase font-bold">Food</span></div></div><div class="flex items-center gap-2 text-slate-600 mb-4"><span class="material-symbols-outlined text-lg">timer</span><span class="text-lg font-bold">00:30</span></div></div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2"><button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Start</button><button class="bg-slate-100 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Ready</button></div>
+        </div>
+        <div class="flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 h-fit">
+          <div class="bg-slate-700 px-4 py-3 flex justify-between items-center text-white"><h3 class="font-lora font-bold text-lg">Order #1042</h3><span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">Takeaway</span></div>
+          <div class="p-4 flex-1"><div class="space-y-3 mb-6"><div class="flex justify-between items-start"><span class="text-sm font-bold">4x Blueberry Muffins</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bakery</span></div><div class="flex justify-between items-start"><span class="text-sm font-bold">1x Earl Grey Tea</span><span class="text-[10px] text-slate-400 uppercase font-bold">Bev</span></div></div><div class="flex items-center gap-2 text-slate-600 mb-4"><span class="material-symbols-outlined text-lg">timer</span><span class="text-lg font-bold">12:15</span></div></div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2"><button class="bg-primary text-white py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Start</button><button class="bg-slate-100 text-slate-400 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide">Ready</button></div>
+        </div>
+      </div>
+    </main>
+    <footer class="px-6 py-4 bg-white border-t border-primary/10 flex items-center justify-between text-sm">
+      <div class="flex gap-8">
+        <div class="flex flex-col"><span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Active</span><span class="font-bold">08 Orders</span></div>
+        <div class="flex flex-col"><span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Avg. Time</span><span class="font-bold">4m 12s</span></div>
+        <div class="flex flex-col"><span class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Delayed</span><span class="font-bold text-orange-500 underline">01 Order</span></div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-lg font-bold text-xs"><span class="material-symbols-outlined text-sm">settings</span>Kitchen Settings</button>
+        <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-xs"><span class="material-symbols-outlined text-sm">history</span>Order History</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- ============================================================
+     QR CODES
+     ============================================================ -->
+<div id="screen-qr-codes" class="screen flex-col min-h-screen bg-[#f8f5f5] pt-[56px] md:pt-[57px]">
+  <div class="flex h-[calc(100vh-57px)] overflow-hidden">
+    <aside class="w-64 flex-shrink-0 border-r border-primary/10 bg-white hidden md:flex flex-col">
+      <div class="p-6 flex flex-col h-full">
+        <div class="flex items-center gap-2 mb-8"><div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white"><span class="material-symbols-outlined text-xl">qr_code_2</span></div><div><h1 class="text-slate-900 text-lg font-bold leading-none">TableQR</h1><p class="text-primary/60 text-xs font-medium">Admin Suite</p></div></div>
+        <nav class="flex-1 space-y-1">
+          <a onclick="showScreen('admin-dashboard')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-primary/5 hover:text-primary cursor-pointer"><span class="material-symbols-outlined">dashboard</span><span class="text-sm font-semibold">Dashboard</span></a>
+          <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary"><span class="material-symbols-outlined">qr_code</span><span class="text-sm font-semibold">QR Codes</span></a>
+          <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-primary/5"><span class="material-symbols-outlined">receipt_long</span><span class="text-sm font-semibold">Orders</span></a>
+          <a onclick="showScreen('menu-management')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-primary/5 cursor-pointer"><span class="material-symbols-outlined">restaurant_menu</span><span class="text-sm font-semibold">Menu</span></a>
+        </nav>
+      </div>
+    </aside>
+    <main class="flex-1 overflow-y-auto bg-background-light p-6 lg:p-10">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div><h2 class="text-3xl font-extrabold tracking-tight text-slate-900">QR Code Management</h2><p class="text-slate-500 mt-1">Manage and export high-resolution QR codes for each physical table.</p></div>
+          <button class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold transition-all shadow-sm"><span class="material-symbols-outlined text-xl">add_circle</span><span>Generate QR for New Table</span></button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white p-4 rounded-xl border border-primary/5 shadow-sm"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Tables</p><p class="text-2xl font-black text-slate-900">10</p></div>
+          <div class="bg-white p-4 rounded-xl border border-primary/5 shadow-sm"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Codes</p><p class="text-2xl font-black text-primary">10</p></div>
+          <div class="bg-white p-4 rounded-xl border border-primary/5 shadow-sm"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Scans (Today)</p><p class="text-2xl font-black text-slate-900">142</p></div>
+        </div>
+        <div class="bg-white rounded-xl border border-primary/10 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead><tr class="border-b border-primary/5 bg-slate-50/50"><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Table #</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">QR Preview</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">PNG Export</th><th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">SVG Export</th></tr></thead>
+              <tbody class="divide-y divide-primary/5" id="qr-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const qrImages = [
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuDSXqmV06G5w5dWXec6ScTE2Kc0DqgE7gRu8cCO8T8KAI-_sYOph5YjRU9KUm-PgkPtCu9lzrZu4JKnq7raMbrfNnOyrKg4nZNSiRcjlN62W5oe_S2HV6ZGePcTqncEVzRSDbUvbf2q5JAEpd4BSdbMnyRNvtHH8IP5cl59WJCm4IQtAiHpBSen7VA9PMu4uPE_6TrV37CYK_J3g1Scl8fhb7eWRS_MUWQgcm4QcOSuhnSLvzYzka5Z5CdmLLNZZaN2aWg2AWbOrTaF',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuC10ky6oqtXmkh9flOUKqO4wgh6lWYfgeNaECZyccZHq7UkvEV4-Ji3sEIdvp0S_BdxL5b7GQJnVD9lH2Dnk96Ij70-FwuurkiBkpPNTSCEySKaZ3rpi2_ssF4NP7bsMqmH6Cs6bJTSBf9XH5AEoPQxEwtZfN2nvU86Xywp3PQXNNDdwMntm85AmnbgyXvnymADqRygJZ40X007YvOnW-dIcvmdDd7ogkk_75QlCfT0eNl1lWqaRENn0S_3leJReeu3DJsltw9zL6aX',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBs_-Kmgx00PF_Ht6un5J7VplVx_7Tq6ErwVEmfvV3Rw2WlH8D20IKiTgKNGko7pr2eaRmrS3CKH6sHohUDu02UPviXss8RsN3VYjziesLZAv_dTVhAxVXUjSQ2i3h9QVs2qepKXRFtlSLHIJ4B2i3zXF3O9iJ13MVjES5kCK0oigNIPKiVw35eVX_DxYfP_RzQ2lVd0XxZNcl286yvNp6Wj-qBiKCTCpsZEP_YiQVkaouT-8IKEqe2G4aMraVorsF-XwJCDsgnyPFG',
+];
+
+function populateQRTable() {
+  const tbody = document.getElementById('qr-table-body');
+  for (let i = 1; i <= 10; i++) {
+    const img = qrImages[(i-1) % qrImages.length];
+    tbody.innerHTML += `<tr class="hover:bg-primary/5 transition-colors">
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">Table ${i}</td>
+      <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">Active</span></td>
+      <td class="px-6 py-4 whitespace-nowrap"><div class="w-10 h-10 bg-slate-100 rounded p-1 border border-primary/5"><img class="w-full h-full object-contain" src="${img}"/></div></td>
+      <td class="px-6 py-4 whitespace-nowrap"><button class="flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"><span class="material-symbols-outlined text-sm">download</span>Download PNG</button></td>
+      <td class="px-6 py-4 whitespace-nowrap"><button class="flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"><span class="material-symbols-outlined text-sm">slide_library</span>Download SVG</button></td>
+    </tr>`;
+  }
+}
+populateQRTable();
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + name);
+  if (target) {
+    target.classList.add('active');
+    target.classList.add('fade-in');
+    window.scrollTo(0, 0);
+    setTimeout(() => target.classList.remove('fade-in'), 400);
+  }
+}
+</script>
+</body>
+</html>

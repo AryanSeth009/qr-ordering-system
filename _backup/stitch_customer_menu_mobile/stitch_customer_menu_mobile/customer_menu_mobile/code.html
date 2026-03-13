@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Cormorant+Garamond:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#990003",
+                        "background-light": "#EFE6DE",
+                        "background-dark": "#230f0f",
+                        "ink": "#181010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif": ["Cormorant Garamond", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-ink dark:text-slate-100 min-h-screen">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">menu</span>
+<h1 class="font-serif text-2xl font-bold text-primary tracking-tight">Cherry &amp; Cream</h1>
+</div>
+<div class="relative">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-ink dark:text-slate-100">shopping_bag</span>
+</button>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">3</span>
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-4">
+<div class="relative flex items-center group">
+<span class="material-symbols-outlined absolute left-4 text-primary/60 group-focus-within:text-primary">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-white dark:bg-stone-900 border-none rounded-xl shadow-sm focus:ring-2 focus:ring-primary/20 placeholder:text-stone-400 text-ink dark:text-slate-100 transition-all" placeholder="Search our delicious menu..." type="text"/>
+</div>
+</div>
+<!-- Category Chips -->
+<div class="flex gap-3 px-4 pb-4 overflow-x-auto no-scrollbar">
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary text-white text-sm font-semibold shadow-md shadow-primary/20">
+            All
+        </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white dark:bg-stone-900 text-ink dark:text-slate-300 border border-stone-200 dark:border-stone-800 text-sm font-medium hover:border-primary/40">
+            Coffee
+        </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white dark:bg-stone-900 text-ink dark:text-slate-300 border border-stone-200 dark:border-stone-800 text-sm font-medium hover:border-primary/40">
+            Tea
+        </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white dark:bg-stone-900 text-ink dark:text-slate-300 border border-stone-200 dark:border-stone-800 text-sm font-medium hover:border-primary/40">
+            Snacks
+        </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-white dark:bg-stone-900 text-ink dark:text-slate-300 border border-stone-200 dark:border-stone-800 text-sm font-medium hover:border-primary/40">
+            Pastries
+        </button>
+</div>
+<!-- Menu Grid -->
+<main class="grid grid-cols-2 gap-4 px-4 pb-24">
+<!-- Item 1 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Premium classic cafe latte with foam art" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnTLhiW94vu5scJqkuAGRzG75Y-2F32NUXI8wiv1Sh4ISxIH6TVqjWwD2ayktFc9dca8m3EEPIcehapmSXAd4MBJyL0GWXplBF-EnZhk-LYkGPhDDluBCE0IgNU79ybpbktTA_JMCp5234cTqLVsa5jhyIe3l0ZtMcSert2XLor-IJhYtXGkwBTnrQPcUtN-i1fjc3VPbyG9FXmN_AP_sVSvnvXQO1hf7TIWqeS7_I8mUMgppSOeea5DJ1du8PGqfqaXGlWVi7Hre-')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">Classic Latte</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Rich espresso with double steamed organic cream</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$5.50</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Vibrant green matcha latte in ceramic cup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwBc6vEPZVYV3gIn94njPaLlWdHih8HqhyzoQrJtYoBfNiCVhOirRyFdTqsnAHn07v7iwY4eqkKm9P6LRsjE7OOXjjvrUpc2e6SUsF3el1VnGXfr--35dCtD54jRcrVLsQYpVOzH_5PsJn2y2YKQD6S6hKMQv-YgkmWUWdvF1fqHmEzO3g1IS75d9t5ySoE7TKnEkuCMcycVbB3Xherru7yfXIyDeXTk7oqyZafBBd0cOpK-G1BMSs8u1QWQErQiBCk2GvuUaW_qe5')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">Ceremonial Matcha</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Premium grade stone-ground matcha with honey</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$6.00</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Freshly baked cherry scone with glaze" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_zJzicFXg6csfxB7TGTQUO3au24WGPaGziqCuW8-lnN_K4xbDtbqhUvPtCL9GqNqJ0p1zK4lzMrhlRRC08pKiNr0wQZyo23xqwudF89YMEvL778Mn-g-aIzsg3OAc9G3XP6H4dTw_kUcvFq9mrFZb49PRfXB7ISCDcZe8Ou-vIM6Alggn5lLLHPcjMCmMG88SfELBRjbe9wmA6SQMC699ZyPv2Rnw7JZGPoq01xAchEVYLoTo97ftx-6BLZIw8LdnlPuh3TRrV0Aw')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">Cherry Scone</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Buttery house-made pastry with fresh tart cherries</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$4.50</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Artisanal avocado toast on sourdough bread" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzBHZp7YSKDvDMTOM0MO_RBSltEtXX0HAjUc8J_fyexWE6iQ9Wn0b7ZFur3LWivpDbyQzmeyPlwTFB5YVi4S3MGaNQKUD4_uxkyMCC_G1zc3q6Yzs8qd5reKXTEPCOA2D91M95y499lJcc_j7UJ8B7bpMnGG14MhBusrZuSvTtmDLtNLes0I25g1dSJFvYIp87SzwcF1NWBX1eabZI9y9WDUAMluddHXo0JLQfmC8atjz_b6zQ8DbKlNoCavL5R2ig-sIGVwbOLanN')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">Avocado Toast</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Toasted sourdough with chili flakes and radish</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$12.00</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Decadent chocolate croissant with flaky crust" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9rycEafD14Wbp0ZG0qWMqbsOniBAnbsF0t4zTkKL7DKofa-t5X65XnzCKY673NWMKLcfaq_-VcK6UDrfiDWSbuF7CbIuW1cMYjtpIM3yTPhvmMWdQpvqxRkGFG8kHwK-X8hO0tE8XzON7ZLeBB23P-YLwoxzGkCiHcGOzx4FWmVs7BkZHuAB4bYskKa0WVRRGLz90uYYihVj-ruCfs8xIUK5E5Vsv08wy6Dida2JeFM3xzb1W2LbX8Rhcv-ztVhWD0kiKvFQInonU')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">Pain au Chocolat</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Twice-baked French pastry with dark chocolate</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$4.75</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="flex flex-col bg-white dark:bg-stone-900 rounded-xl overflow-hidden shadow-sm border border-stone-100 dark:border-stone-800 group">
+<div class="aspect-square w-full bg-cover bg-center overflow-hidden" data-alt="Glass of cold brew coffee with ice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAECCbwf5wWhUEmxmckujrbMEIUZXRpuGYFRG6LBoN8340cFBAzL1zEdhrR0zuowlXAnf3r6Pa-PrPemspNMjaKqUtc3K8YidQuO1i8FK1PcyoY965uuiX0biwaGE3mbebZdX-z7VfAUJsQTPh0-2q5JG-8qYNbk2iqlMmdaBn27oTJ7bYJmH6YRmtv1RZ-zTGq0BksQWY7Po89X8NmW9oYdn8tQvMglfmdFNdiTGo5gba3dZ6xAa2ItC8IfufovGsUs14l9daH-tZw')">
+</div>
+<div class="p-3 flex flex-col flex-grow">
+<h3 class="font-serif text-lg font-bold leading-tight text-ink dark:text-slate-100">12hr Cold Brew</h3>
+<p class="text-xs text-stone-500 dark:text-stone-400 mt-1 line-clamp-2">Smooth, low-acid coffee steeped for 12 hours</p>
+<div class="mt-auto pt-3 flex items-center justify-between">
+<span class="text-ink dark:text-slate-100 font-bold">$5.25</span>
+<button class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-t border-stone-200 dark:border-stone-800 pb-safe-area">
+<div class="flex justify-around items-center h-16 max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Menu</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400 dark:text-stone-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Orders</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400 dark:text-stone-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Saved</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400 dark:text-stone-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</nav>
+<!-- Floating Action Button (Optional secondary) -->
+<div class="fixed bottom-20 right-4 z-40">
+<button class="bg-primary text-white h-14 w-14 rounded-full shadow-lg shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+</body></html>

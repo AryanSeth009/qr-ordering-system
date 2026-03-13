@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #990003;
+  --color-background-light: #EFE6DE;
+  --color-background-dark: #230f0f;
+  --color-ink: #1A1210;
+  --color-muted: #8A7B72;
+  --color-cream: #EFE6DE;
+
+  --font-display: var(--font-plus-jakarta-sans), sans-serif;
+  --font-serif: var(--font-cormorant-garamond), serif;
+  --font-lora: var(--font-lora), serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .screen {
+    display: none;
+  }
+  .screen.active {
+    display: flex;
+  }
+  .progress-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .new-order-glow {
+    box-shadow: 0 0 15px rgba(153,0,3,0.4);
+    border: 2px solid #990003;
+  }
+  .nav-btn {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover {
+    opacity: 0.8;
+  }
+  .fade-in {
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-bg {
+    background: linear-gradient(135deg, #230f0f 0%, #3d1a1a 40%, #990003 100%);
+  }
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(153, 0, 3, 0.15);
+  }
+  .pb-safe-area {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background-light);
+  color: var(--color-ink);
 }

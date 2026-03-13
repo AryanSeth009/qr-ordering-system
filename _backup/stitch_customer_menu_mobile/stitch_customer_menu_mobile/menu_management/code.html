@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu Management | RestoAdmin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#990003",
+                        "background-light": "#f8f5f5",
+                        "background-dark": "#230f0f",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-primary/10 flex flex-col shrink-0">
+<div class="p-6 border-b border-primary/5">
+<div class="flex items-center gap-2">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none">RestoAdmin</h1>
+<p class="text-xs text-slate-500 font-medium mt-1 uppercase tracking-wider">Management Portal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-primary/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-sm font-semibold">Menu</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-primary/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-sm font-semibold">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-primary/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-semibold">Customers</span>
+</a>
+<div class="pt-4 pb-2">
+<p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Account</p>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-primary/5 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-semibold">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-primary/5">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-primary/5">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARyzFB4PGd5nMWdhGEKr3lgELoAuZ3ttcGG7r938uURta2pe1y1oFrhd_mTLB5Jue591hL8I__AiLb4jUQOf_qZoJ2qKFm0fA0CWhII4hINrZK0g2ieB5X19SlRlwYfktt5aydC17omg3QBXkwSPkUvYYhEhH_vCUeXn0ezA62d7kYDrnUT9bY6PWUnwC0JZ-KzpE5ky3ImYzuqlLJrdA11uh-D6eYv48lk5AWTFnpJuqNuyGSQOxcVVnckBi-dlidR49vJTtLEcrW"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Alex Morgan</p>
+<p class="text-[10px] text-slate-500 truncate uppercase font-bold">Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden relative">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-primary/10 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative max-w-md w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all" placeholder="Search menu items..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2.5 right-2.5 size-2 bg-primary rounded-full border-2 border-white"></span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-bold transition-all shadow-sm">
+<span class="material-symbols-outlined text-xl">add</span>
+<span>Add New Item</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Tabs & Filter Section -->
+<div class="flex flex-col gap-6">
+<div class="flex items-end justify-between border-b border-primary/10 pb-1">
+<div class="flex gap-8">
+<button class="pb-4 border-b-2 border-primary text-primary font-bold text-sm">All Items</button>
+<button class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Starters</button>
+<button class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Main Course</button>
+<button class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Desserts</button>
+<button class="pb-4 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Beverages</button>
+</div>
+<div class="pb-3">
+<button class="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm leading-none">filter_list</span>
+                                Sort By: Name
+                            </button>
+</div>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+<div class="relative aspect-video bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Gourmet classic cheeseburger with sesame bun" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzRNbVp02nhWkahDhRq3FNRAa4127cRkr7Vn8K8ZQzKh8z1Jlu-zek9MGfHmSC6GPgW3DVC7UBGG9ganqdNINlkVjeO7itVp74GWqZARUieAlBs-Zj1e9vwMX_E1fx2YciIhrUvpvMZBSAVrOA9F77Qrtec8u3dFGcLAjftHAq4HyGf6Lw_J4WlavbndscscrnBitO7r7hxOCGVG8AesWuCrymEPvBG7_iDCypuclbWaBzNwxGHwjWwX_njRM7qooluZL6TSaS9Rhk"/>
+<div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Main Course</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Classic Wagyu Burger</h3>
+<span class="font-bold text-primary">$18.50</span>
+</div>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">A premium wagyu beef patty topped with truffle aioli, aged cheddar, and caramelized onions.</p>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-2">
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tighter">Available</span>
+</div>
+<div class="text-[10px] font-bold text-slate-400">SKU: BURG-001</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+<div class="relative aspect-video bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh salmon fillet with roasted vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFJbHeIojbB78zU2KUIUI0e9UN6L4xi1Z-d-LtG9l3Kigdw_iR-iCYb7Lm6WGnMwJm9P0pufsBMoLUREIYsCwbJpTfxh6Q3MOPKSvDwgQLoMZdom6IEYPh7UY3-LDNoVela4Vq8Va2qmraK3L939UDdKeA5_KPsXgk5IRNJpsbZM8X_vtw4sPEU2R5yoEBBFMF0I7SFJGhmhKfEpB8OKrOVLr9GFCRsINVnALhy7LaOdYtUD7Jl-wjMTcrh_L9GbRNaGeiQbSlbrq4"/>
+<div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Main Course</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Herb Crusted Salmon</h3>
+<span class="font-bold text-primary">$24.00</span>
+</div>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">Atlantic salmon with a crust of fresh parsley, dill and lemon zest, served with asparagus.</p>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-2">
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tighter">Available</span>
+</div>
+<div class="text-[10px] font-bold text-slate-400">SKU: FISH-024</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+<div class="relative aspect-video bg-slate-200 overflow-hidden grayscale">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Rich chocolate lava cake on a plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANRamulBve3UIyrNjSUMFFxWjHRmbQx_6orkdzS7evrYUE7P2TwPi5M4uDTjmBT53VQCOG9dc8fHWRPVrTxGCzS3fKJ8C8Q96X1KbkUmJzv18AlJ7-FXw-O-090Wh4lRul7dDvOM4swonCSwKyWpjxjz_6JRIxNco21b4tgI9uit71VdhR9dYza5LyypiWVeEt76UbVq0_jhZqNnpv5QPq3lbRQVHsjAHjplP6ctwhM0_YxfLi2OZIYRB13SXr8sal6BLZjB3wR33Q"/>
+<div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-black/40">
+<span class="text-white font-bold text-sm tracking-widest uppercase">Sold Out</span>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Desserts</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-slate-900 dark:text-slate-100 opacity-60">Dark Lava Cake</h3>
+<span class="font-bold text-primary opacity-60">$12.00</span>
+</div>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4 opacity-60">Warm chocolate cake with a molten dark chocolate center, served with vanilla bean gelato.</p>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-2">
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Out of Stock</span>
+</div>
+<div class="text-[10px] font-bold text-slate-400">SKU: DESS-009</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-primary/5 shadow-sm group hover:shadow-md transition-shadow overflow-hidden">
+<div class="relative aspect-video bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh garden salad with feta and olives" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxY7_06UJXf7clgTWDwySydm6FLgz9EK82NPkaEfUpl_mcc5Wu-1klc3KHkMr0BNnzbvMhRJGN-FVyqjU94KPmZtTgwNnJ6E-flfQA43VNUi--eMJjSL9dnXKOiZ7ykYQwWKJeQnROeeYDpQwA8SY20d24AMEjrTr0t9XExVqhJPasL9xYtA9cji0FUiTFQcDMFGQTF3ubtN6ribr8csLjcFMDSWQyFoU0HXU4udYtFf19jyBgpmHDXeDCJf2PhM8KZH0jbWRFpHaW"/>
+<div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+<div class="absolute bottom-3 left-3">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Starters</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Mediterranean Salad</h3>
+<span class="font-bold text-primary">$14.00</span>
+</div>
+<p class="text-sm text-slate-500 line-clamp-2 mb-4">A fresh mix of seasonal greens, kalamata olives, feta cheese, and balsamic vinaigrette.</p>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-2">
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tighter">Available</span>
+</div>
+<div class="text-[10px] font-bold text-slate-400">SKU: STAR-012</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Edit Item Modal Overlay -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+<div class="px-8 py-6 border-b border-primary/10 flex items-center justify-between bg-primary/5">
+<div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Edit Menu Item</h2>
+<p class="text-sm text-slate-500">Update item details, pricing and availability.</p>
+</div>
+<button class="size-8 rounded-full hover:bg-white dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-8 overflow-y-auto space-y-6">
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2 sm:col-span-1 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">Item Name</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 focus:ring-primary/20 focus:border-primary" type="text" value="Classic Wagyu Burger"/>
+</div>
+<div class="col-span-2 sm:col-span-1 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">Category</label>
+<select class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 focus:ring-primary/20 focus:border-primary">
+<option>Starters</option>
+<option selected="">Main Course</option>
+<option>Desserts</option>
+<option>Beverages</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2 sm:col-span-1 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">Price ($)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-8 pr-4 focus:ring-primary/20 focus:border-primary font-bold" step="0.01" type="number" value="18.50"/>
+</div>
+</div>
+<div class="col-span-2 sm:col-span-1 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">SKU Code</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 focus:ring-primary/20 focus:border-primary" type="text" value="BURG-001"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">Description</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 focus:ring-primary/20 focus:border-primary resize-none" rows="3">A premium wagyu beef patty topped with truffle aioli, aged cheddar, and caramelized onions.</textarea>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500">Item Image</label>
+<div class="flex items-center gap-6">
+<div class="size-24 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+<img class="w-full h-full object-cover" data-alt="Classic Wagyu Burger thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaIO6sCRNK_qfakgYaBhUVmp6PD-0D3llO0h1kmRqutIO391pfTXfplh1YarEbULxidte86ihx4KOoX198bmQlhD_iCAq2ia_qk2JNHhETKsFjHcwTYHdTRAU3jniSLblQtR7z6kvueiyrDaCwns7HPtxW6QEEV3Ty-Hb9obF0ldtKfE6ILKK2z1HioxR_Ch32wMc11B4N7MFfiWHnHIocVLFkxXRoPqXu_Aah8vYN7aSaHkL4ytzIW7hWTd0Vt8Cj4AN_wXMETtL5"/>
+</div>
+<div class="flex-1">
+<div class="border-2 border-dashed border-primary/20 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-primary/5 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors">cloud_upload</span>
+<p class="text-xs font-bold mt-2 text-slate-600">Click to upload or drag &amp; drop</p>
+<p class="text-[10px] text-slate-400 mt-1">PNG, JPG or JPEG (Max. 2MB)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-8 py-6 border-t border-primary/10 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
+<button class="text-slate-500 hover:text-primary font-bold text-sm transition-colors uppercase tracking-widest px-4 py-2">Delete Item</button>
+<div class="flex items-center gap-3">
+<button class="px-6 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">Cancel</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-lg text-sm font-bold transition-all shadow-lg shadow-primary/20">Save Changes</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>
