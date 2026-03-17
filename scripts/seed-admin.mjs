@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 
 async function seedAdmin() {
   const email = 'admin@05rpm.com';
-  const password = '05rpm@pass';
+  const password = '  ';
 
   console.log(`Attempting to create admin user: ${email}`);
 
